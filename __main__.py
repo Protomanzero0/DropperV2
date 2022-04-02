@@ -12,7 +12,7 @@ def main():
     states = {
         "begin_state": lambda: begin_state(screen_width, screen_height),
         "play_state": lambda: play_state(ball, platforms),
-        "end_state": lambda: end_state(screen_width, screen_height)
+        "end_state": lambda: end_state(screen_width, screen_height, ball)
     }
 
     pyray.init_window(screen_width, screen_height, "Ball movement test")
@@ -52,8 +52,9 @@ def play_state(ball, platforms):
     pyray.begin_drawing()
 
     pyray.clear_background(pyray.Color(255, 255, 255))
-
+    score = ball.score
     pyray.draw_text("Move ball with arrow keys", 10, 10, 20, [0, 0, 0])
+    pyray.draw_text(f"Score: {score}", 10,40,20, [0,0,0])
 
     for platform in platforms:
         platform.update()
@@ -71,12 +72,13 @@ def play_state(ball, platforms):
 
     return "play_state"
 
-def end_state(screen_width, screen_height):
+def end_state(screen_width, screen_height, ball):
     pyray.begin_drawing()
 
     pyray.clear_background(pyray.Color(255,255,255))
-
-    pyray.draw_text("GAME OVER", screen_width//2, screen_height-400, 40, [255,0,255])
+    score = ball.score
+    pyray.draw_text("GAME OVER", screen_width//2-125, screen_height-400, 40, [255,0,255])
+    pyray.draw_text(f"Final Score: {score}", screen_width//2-135, screen_height-500, 40, [255,0,0])
 
     pyray.end_drawing()
 
