@@ -18,6 +18,7 @@ class Ball(Body):
         self.position = pyray.Vector2(x, y)
         self.radius = radius
         self.color = color
+        self.score = 0
 
         self.control_lock = False
 
@@ -53,6 +54,7 @@ class Ball(Body):
             if is_colliding:
                 self.control_lock = False
                 self.sticky_platform = platform
+                self.score += 1
         
         if no_collisions:
             self.control_lock = True
