@@ -4,6 +4,9 @@ from raylib import KEY_LEFT, KEY_RIGHT
 from body import Body
 
 def AABBCollision(x1, y1, w1, h1, x2, y2, w2, h2):
+    # ------------------------------------------------
+    #   Handles collision of objects given their dimensions
+    # ------------------------------------------------
     return (
         x1 < x2 + w2 and
         x1 + w1 > x2 and
@@ -12,6 +15,20 @@ def AABBCollision(x1, y1, w1, h1, x2, y2, w2, h2):
     )
 
 class Ball(Body):
+    # ------------------------------------------------------------------------------------------------
+    #   Handles drawing and positioning the controlled object. Overwrites Body's Update and Draw methods. 
+    #
+    #   Methods: 
+    #       update(self): Updates the ball position based on player input and platform collision
+    #
+    #       draw(self): Draws the ball as a red circle
+    #
+    #       contrain(self, val, min, max): Prevents ball from leaving the bounds of the playspace
+    #           
+    #       is_dead(self): Handles collision with top or bottom of playspace
+    #
+    #       handle_collision(self, platforms): Handles collision of ball and platforms
+    # ------------------------------------------------------------------------------------------------
     def __init__(self, x, y, radius, color):
         super().__init__()
         self.velocity = pyray.Vector2(0, 0)
@@ -35,7 +52,6 @@ class Ball(Body):
         return self.position.y > 800 or self.position.y < 0
 
     def handle_collision(self, platforms):
-
         self.sticky_platform = None
         no_collisions = True
 
@@ -60,7 +76,7 @@ class Ball(Body):
             self.control_lock = True
         
 
-    def update(self):            
+    def update(self):
         if not self.control_lock:
             if pyray.is_key_down(KEY_RIGHT):
                 self.velocity.x += 0.5
