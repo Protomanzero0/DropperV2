@@ -31,15 +31,15 @@ class Ball(Body):
     # ------------------------------------------------------------------------------------------------
     def __init__(self, x, y, radius, color):
         super().__init__()
-        self.velocity = pyray.Vector2(0, 0)
-        self.position = pyray.Vector2(x, y)
-        self.radius = radius
-        self.color = color
+        self._velocity = pyray.Vector2(0, 0)
+        self._position = pyray.Vector2(x, y)
+        self._radius = radius
+        self._color = color
         self.score = 0
 
-        self.control_lock = False
+        self._control_lock = False
 
-        self.sticky_platform = None
+        self._sticky_platform = None
 
     def constrain(self, val, min, max):
         if val < min: 
@@ -49,18 +49,18 @@ class Ball(Body):
         return val
 
     def is_dead(self):
-        return self.position.y > 800 or self.position.y < 0
+        return self._position.y > 800 or self._position.y < 0
 
     def handle_collision(self, platforms):
-        self.sticky_platform = None
+        self._sticky_platform = None
         no_collisions = True
 
         for platform in platforms:
             is_colliding = AABBCollision(
-                    self.position.x - self.radius, 
-                    self.position.y - self.radius,
-                    self.radius * 2,
-                    self.radius * 2,
+                    self._position.x - self._radius, 
+                    self._position.y - self._radius,
+                    self._radius * 2,
+                    self._radius * 2,
                     platform.position.x,
                     platform.position.y,
                     platform.dimensions.x,
@@ -68,38 +68,38 @@ class Ball(Body):
                     )
             no_collisions = no_collisions and not is_colliding
             if is_colliding:
-                self.control_lock = False
-                self.sticky_platform = platform
+                self._control_lock = False
+                self._sticky_platform = platform
                 self.score += 1
         
         if no_collisions:
-            self.control_lock = True
+            self._control_lock = True
         
 
     def update(self):
-        if not self.control_lock:
+        if not self._control_lock:
             if pyray.is_key_down(KEY_RIGHT):
-                self.velocity.x += 0.5
+                self._velocity.x += 0.5
 
             if pyray.is_key_down(KEY_LEFT):
-                self.velocity.x -= 0.5
+                self._velocity.x -= 0.5
 
-        self.velocity.y += 0.2
+        self._velocity.y += 0.2
 
-        self.position.x += self.velocity.x
-        self.position.y += self.velocity.y
+        self._position.x += self._velocity.x
+        self._position.y += self._velocity.y
 
-        self.velocity.x *= 0.95
+        self._velocity.x *= 0.95
 
-        if self.sticky_platform:
-            self.velocity.y = 0
-            self.position.y = self.sticky_platform.position.y - self.radius
+        if self._sticky_platform:
+            self._velocity.y = 0
+            self._position.y = self._sticky_platform.position.y - self._radius
 
-        self.position.x = self.constrain(self.position.x, 0, 450)
+        self._position.x = self.constrain(self._position.x, 0, 450)
 
 
         
 
     def draw(self):
-        pyray.draw_circle_v(self.position, self.radius, self.color)
+        pyray.draw_circle_v(self._position, self._radius, self._color)
     

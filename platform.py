@@ -15,7 +15,7 @@ class Platform(Body):
         super().__init__()
         self.position = pyray.Vector2(x, y)
         self.dimensions = pyray.Vector2(200, 50)
-        self.color = color
+        self._color = color
 
 
     def update(self):
